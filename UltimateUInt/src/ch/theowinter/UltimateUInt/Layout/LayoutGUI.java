@@ -1,11 +1,16 @@
 package ch.theowinter.UltimateUInt.Layout;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -78,11 +83,18 @@ public class LayoutGUI {
 		 * - FlowLayout: Containers/Elements inside FL can be aligned LEFT, RIGHT, CENTER.
 		 * - GridBagLayout: Table-ish Layout. Good for forms.
 		 */
-		
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
 		JPanel header = new JPanel();
+		
+		//Getting the layout when we created it anonymously.
+		FlowLayout flowLayout = (FlowLayout) header.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
 		contentPane.add(header, BorderLayout.NORTH);
+		
+		//Creating a label with a custom font setting.
+		JLabel lblLayoutExample = new JLabel("Layout Example");
+		lblLayoutExample.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		header.add(lblLayoutExample);
 		
 		//Center Panel, with a GridBag Layout inside:
 		JPanel center = new JPanel();
@@ -152,6 +164,16 @@ public class LayoutGUI {
 		
 		JPanel bottom = new JPanel();
 		contentPane.add(bottom, BorderLayout.SOUTH);
+		
+		JButton btnNewButton = new JButton("a button");
+		bottom.add(btnNewButton);
+		
+		//A Strut can help to keep two components/buttons/etc. separated.
+		Component horizontalStrut = Box.createHorizontalStrut(50);
+		bottom.add(horizontalStrut);
+		
+		JButton btnNewButton_1 = new JButton("another button");
+		bottom.add(btnNewButton_1);
 		
 	}
 }
