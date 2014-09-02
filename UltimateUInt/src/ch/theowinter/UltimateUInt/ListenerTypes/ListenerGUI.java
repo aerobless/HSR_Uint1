@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,11 +17,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class ListenerGUI {
 
 	private JFrame frmListenerExample;
-	private JTextField textField;
+	private JTextField someTextField;
+	private JButton someButton;
 
 	/**
 	 * Launch the application.
@@ -80,14 +85,14 @@ public class ListenerGUI {
 		gbc_lblJtextfield.gridy = 0;
 		center.add(lblJtextfield, gbc_lblJtextfield);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 0;
-		center.add(textField, gbc_textField);
-		textField.setColumns(10);
+		someTextField = new JTextField();
+		GridBagConstraints gbc_someTextField = new GridBagConstraints();
+		gbc_someTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_someTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_someTextField.gridx = 1;
+		gbc_someTextField.gridy = 0;
+		center.add(someTextField, gbc_someTextField);
+		someTextField.setColumns(10);
 		
 		JLabel lblJradiobutton = new JLabel("JRadioButton");
 		GridBagConstraints gbc_lblJradiobutton = new GridBagConstraints();
@@ -114,14 +119,44 @@ public class ListenerGUI {
 		
 		JPanel bottom = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) bottom.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		flowLayout_1.setAlignment(FlowLayout.RIGHT);
 		frmListenerExample.getContentPane().add(bottom, BorderLayout.SOUTH);
 		
-		JButton btnIAmA = new JButton("I am a button");
-		bottom.add(btnIAmA);
+		someButton = new JButton("I am a button");
+		bottom.add(someButton);
 		
-		JLabel status = new JLabel("Status:");
-		bottom.add(status);
+		initListeners();
 	}
-
+	
+	private void initListeners(){
+		
+		//Action Listener Example:
+		someButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent aE) {
+				System.out.println("Action through Button activated. I also works with the spacebar, try it ;-)");
+			}
+		});
+		
+		//Document Listener Example:
+		someTextField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent aE) {
+				System.out.println("Removed data in textfield");
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent aE) {
+				System.out.println("Inserted data in textfield");
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent aE) {
+				System.out.println("Changed data in textField");
+			}
+		});
+		
+	}
 }
