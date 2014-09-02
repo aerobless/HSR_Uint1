@@ -15,12 +15,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/*
+ * We have to implement Observer because we have to specify
+ * what to do when notified inside the update Method. Observer is
+ * a interface.
+ */
 public class ObserverGUI implements Observer{
 
 	private JFrame frmObserverExample;
 	private JLabel veryImportantData;
 	
-	private StorageOfImportantThings importantThings = new StorageOfImportantThings("Press \"Trigger a change\" to change me!");
+	private StorageOfImportantThings importantThings = new StorageOfImportantThings();
 
 	/**
 	 * Launch the application.
@@ -90,26 +95,27 @@ public class ObserverGUI implements Observer{
 			}
 		});
 		
-		importantThings.addObserver(this);
+		//Important for OBSERVER:
+		importantThings.addObserver(this); //1. We need to register the Observer with the Observable.
 	}
 
-
-	@Override
+	//Important for OBSERVER:
+	@Override //2. Method is automatically created when we implement Observer
 	public void update(Observable aO, Object aArg) {
+		 //3. What we do when we get notified from the Observable:
 		veryImportantData.setText(importantThings.getCurrentImportantThing());
 	}
 }
 
+/*
+ * Observable is only extended because we don't need to implement behavior, 
+ * we only want to use the "setChanged" and "notifyObserver" from the Observable class.
+ */
 class StorageOfImportantThings extends Observable {
 	String currentlyImportantThing;
 	ArrayList<String> databaseOfImportantThings = new ArrayList<String>();
 	
-	public StorageOfImportantThings(String firstImportantThing){
-		currentlyImportantThing = firstImportantThing;
-		initDatabaseOfImportantThings();
-	}
-	
-	private void initDatabaseOfImportantThings(){
+	public StorageOfImportantThings(){
 		databaseOfImportantThings.add("Natürliches Mineralwasser mit Kohlensäure");
 		databaseOfImportantThings.add("Stabilo Boss (R) Original");
 		databaseOfImportantThings.add("Y U NO STOP PRESSING BUTTON??");
@@ -120,11 +126,15 @@ class StorageOfImportantThings extends Observable {
     }
 	
 	public void changeImportantThingToMoreImportantThing(){
-		currentlyImportantThing = databaseOfImportantThings.get(getRandomInRange(0,databaseOfImportantThings.size()-1));
+		currentlyImportantThing = databaseOfImportantThings.get(getRandomStringFromDB());
 		
-		//Important part:
-		setChanged(); //Marks this Observable Object as changed. So .hasChange() will now return true.
-		notifyObservers(); //Notifies all the Observes that are watching this object and then changes it's state back to "no changes".
+		//Important for OBSERVER:
+		setChanged(); //4. Marks this Observable Object as changed. So .hasChange() will now return true.
+		notifyObservers(); //5. Notifies all the Observes that are watching this object and then changes it's state back to "no changes".
+	}
+
+	private int getRandomStringFromDB() {
+		return getRandomInRange(0,databaseOfImportantThings.size()-1);
 	}
 	
 	public String getCurrentImportantThing(){
