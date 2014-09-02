@@ -9,6 +9,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,7 +27,9 @@ public class ListenerGUI {
 
 	private JFrame frmListenerExample;
 	private JTextField someTextField;
-	private JButton someButton;
+	private JButton firstButton;
+	private JButton secondButton;
+	private JButton thirdButton;
 
 	/**
 	 * Launch the application.
@@ -122,16 +127,27 @@ public class ListenerGUI {
 		flowLayout_1.setAlignment(FlowLayout.RIGHT);
 		frmListenerExample.getContentPane().add(bottom, BorderLayout.SOUTH);
 		
-		someButton = new JButton("I am a button");
-		bottom.add(someButton);
+		firstButton = new JButton("ActionListener");
+		bottom.add(firstButton);
+		
+		secondButton = new JButton("Mouse Adapter");
+		bottom.add(secondButton);
+		
+		thirdButton = new JButton("Mouse Listener");
+		bottom.add(thirdButton);
 		
 		initListeners();
 	}
 	
 	private void initListeners(){
 		
-		//Action Listener Example:
-		someButton.addActionListener(new ActionListener() {
+		/*
+		 * Action Listener Example:
+		 * ActionListener should be your first choice when implementing a simple button that someone
+		 * would click to trigger some method. That's because the ActionListener can be triggered by the space-bar
+		 * which is important for people who aren't using a mouse (for example people with disabilities).
+		 */
+		firstButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent aE) {
@@ -139,7 +155,54 @@ public class ListenerGUI {
 			}
 		});
 		
-		//Document Listener Example:
+		/*
+		 * Mouse Adapter Example:
+		 * The MouseAdapter is the same things as the MouseListener except that you don't have to implement all the
+		 * possible methods when using the adapter. This keeps your code clean, so always use the adapter
+		 * instead of the real thing.
+		 */
+		secondButton.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mousePressed(MouseEvent aE) {
+				System.out.println("MouseAdapter detects MousePressed!");
+			}
+		});
+		
+		//Mouse Listener Example:
+		thirdButton.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent aE) {
+				System.out.println("MouseListener detects MouseReleased");
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent aE) {
+				System.out.println("MouseListener detects MousePressed");			
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent aE) {
+				System.out.println("MouseListener detects MouseExited");
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent aE) {
+				System.out.println("MouseListener detects MouseEntered");
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent aE) {
+				System.out.println("MouseListener detects MouseClicked");
+			}
+		});
+		
+		/*
+		 * Document Listener Example:
+		 * Can be used to detect changes in a textField, textArea etc. Remember that you always need to
+		 * "getDocument()" before you can add a DocumentListener.
+		 */
 		someTextField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
