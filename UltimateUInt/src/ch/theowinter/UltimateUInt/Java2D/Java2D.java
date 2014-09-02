@@ -12,7 +12,18 @@ class Canvas extends JPanel {
 
 	private void doDrawing(Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
+		
+		//Draw text:
 		g2d.drawString("Java 2D", 50, 50);
+		
+		//Draw a straight line:
+		g2d.drawLine(30, 30, 200, 30);
+		
+		//Move the drawing area
+		// 0,0 is the top left corner. so the y value actually goes towards the bottom.
+		g2d.translate(80, 100); //x,y
+		//Draw a filled, round-rectangle:
+		g2d.fillRoundRect(-20, -20, 70, 60, 25, 25);
 	}
 	
 	@Override
@@ -20,7 +31,6 @@ class Canvas extends JPanel {
 			super.paintComponent(g);
 			doDrawing(g);
 	}
-	
 }
 
 public class Java2D extends JFrame {
