@@ -4,15 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ObserverGUI {
+public class ObserverGUI implements Observer{
 
 	private JFrame frmObserverExample;
+	private JLabel veryImportantData;
+	
+	private StorageOfImportantThings importantThings = new StorageOfImportantThings("Press \"Trigger a change\" to change me!");
 
 	/**
 	 * Launch the application.
@@ -66,7 +74,7 @@ public class ObserverGUI {
 		fl_textPanel.setHgap(30);
 		center.add(textPanel, BorderLayout.NORTH);
 		
-		JLabel veryImportantData = new JLabel("Press \"Trigger a change\" to change me!");
+		veryImportantData = new JLabel("Press \"Trigger a change\" to change me!");
 		textPanel.add(veryImportantData);
 		
 		JPanel bottom = new JPanel();
@@ -74,6 +82,53 @@ public class ObserverGUI {
 		
 		JButton btnTriggerAChange = new JButton("Trigger a change");
 		bottom.add(btnTriggerAChange);
+		btnTriggerAChange.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent aE) {
+				importantThings.changeImportantThingToMoreImportantThing();
+			}
+		});
+		
+		importantThings.addObserver(this);
 	}
 
+
+	@Override
+	public void update(Observable aO, Object aArg) {
+		veryImportantData.setText(importantThings.getCurrentImportantThing());
+	}
+}
+
+class StorageOfImportantThings extends Observable {
+	String currentlyImportantThing;
+	ArrayList<String> databaseOfImportantThings = new ArrayList<String>();
+	
+	public StorageOfImportantThings(String firstImportantThing){
+		currentlyImportantThing = firstImportantThing;
+		initDatabaseOfImportantThings();
+	}
+	
+	private void initDatabaseOfImportantThings(){
+		databaseOfImportantThings.add("Natürliches Mineralwasser mit Kohlensäure");
+		databaseOfImportantThings.add("Stabilo Boss (R) Original");
+		databaseOfImportantThings.add("Y U NO STOP PRESSING BUTTON??");
+	}
+	
+    public int getRandomInRange(int min, int max){
+    	return min + (int)(Math.random() * ((max - min) + 1));
+    }
+	
+	public void changeImportantThingToMoreImportantThing(){
+		currentlyImportantThing = databaseOfImportantThings.get(getRandomInRange(0,databaseOfImportantThings.size()-1));
+		
+		//Important part:
+		setChanged(); //Marks this Observable Object as changed. So .hasChange() will now return true.
+		notifyObservers(); //Notifies all the Observes that are watching this object and then changes it's state back to "no changes".
+	}
+	
+	public String getCurrentImportantThing(){
+		return currentlyImportantThing;
+	}
+	
 }
