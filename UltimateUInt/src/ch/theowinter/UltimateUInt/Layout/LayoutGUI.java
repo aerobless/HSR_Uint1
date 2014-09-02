@@ -2,6 +2,7 @@ package ch.theowinter.UltimateUInt.Layout;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -54,8 +55,11 @@ public class LayoutGUI {
 		frmLayoutExample = new JFrame();
 		frmLayoutExample.setTitle("Layout Example");
 		
+		//Setting a minimum size for the window.
+		frmLayoutExample.setMinimumSize(new Dimension(400, 500));
+		
 		//Set the x,y coordinates and the size (width, height) of frame.
-		frmLayoutExample.setBounds(100, 100, 450, 300);
+		frmLayoutExample.setBounds(100, 100, 400, 500);
 		
 		//Behavior when pressing the X button on the window.
 		frmLayoutExample.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,6 +86,7 @@ public class LayoutGUI {
 		 * - BorderLayout: 5 Areas (NORTH, SOUTH, WEST, EAST and CENTER) - Usually a good starting point.
 		 * - FlowLayout: Containers/Elements inside FL can be aligned LEFT, RIGHT, CENTER.
 		 * - GridBagLayout: Table-ish Layout. Good for forms.
+		 * - AbsoluteLayout: also called null-layout. Is set by "nulL". Components can be placed pixel-exact and will not move.
 		 */
 		contentPane.setLayout(new BorderLayout(0, 0));
 		JPanel header = new JPanel();
@@ -101,12 +106,14 @@ public class LayoutGUI {
 		contentPane.add(center, BorderLayout.CENTER);
 		{
 			GridBagLayout gbl_center = new GridBagLayout();
+			
+			//Here the size(width/height) of individual columns/rows can be set. 0 = dynamic size
 			gbl_center.columnWidths = new int[]{132, 0, 0};
-			gbl_center.rowHeights = new int[]{0, 0, 0, 0};
+			gbl_center.rowHeights = new int[]{0, 0, 0, 52, 0};
 			
 			//Weight 1 = This column/row gets extended when the window is resized. Usually the last row/column.
 			gbl_center.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-			gbl_center.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_center.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 			center.setLayout(gbl_center);
 			
 			//Adding a label to the first field of the GridBag.
@@ -149,23 +156,53 @@ public class LayoutGUI {
 			JLabel lblYourMessage = new JLabel("your message");
 			GridBagConstraints gbc_lblYourMessage = new GridBagConstraints();
 			gbc_lblYourMessage.anchor = GridBagConstraints.EAST;
-			gbc_lblYourMessage.insets = new Insets(0, 0, 0, 5);
+			gbc_lblYourMessage.insets = new Insets(0, 0, 5, 5);
 			gbc_lblYourMessage.gridx = 0;
 			gbc_lblYourMessage.gridy = 2;
 			center.add(lblYourMessage, gbc_lblYourMessage);
 			
 			JTextArea textArea = new JTextArea();
 			GridBagConstraints gbc_textArea = new GridBagConstraints();
+			gbc_textArea.insets = new Insets(0, 0, 5, 0);
 			gbc_textArea.fill = GridBagConstraints.BOTH;
 			gbc_textArea.gridx = 1;
 			gbc_textArea.gridy = 2;
 			center.add(textArea, gbc_textArea);
 		}
 		
+		JLabel lblNewLabel = new JLabel("absolute layout");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 3;
+		center.add(lblNewLabel, gbc_lblNewLabel);
+		
+		//Creating a JPanel with the absolute Layout.
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		
+		//Creating a button inside the absolute area.
+		JButton btnAbsoArea = new JButton("abso area");
+		btnAbsoArea.setBounds(67, 6, 174, 29);
+		panel.add(btnAbsoArea);
+		
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 1;
+		gbc_panel.gridy = 3;
+		center.add(panel, gbc_panel);
+		
 		JPanel bottom = new JPanel();
 		contentPane.add(bottom, BorderLayout.SOUTH);
 		
-		JButton btnNewButton = new JButton("a button");
+		//Creating a button and setting a preferred size. The button will use this size if possible.
+		JButton btnNewButton = new JButton("btn");
+		btnNewButton.setPreferredSize(new Dimension(50, 50));
+		
+		//you can also set a minimum and maximum size
+		btnNewButton.setMinimumSize(new Dimension(100, 500));
+		btnNewButton.setMaximumSize(new Dimension(5, 5));
 		bottom.add(btnNewButton);
 		
 		//A Strut can help to keep two components/buttons/etc. separated.
