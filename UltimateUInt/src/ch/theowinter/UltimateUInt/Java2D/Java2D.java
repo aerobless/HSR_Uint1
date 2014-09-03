@@ -1,5 +1,6 @@
 package ch.theowinter.UltimateUInt.Java2D;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -22,8 +23,20 @@ class Canvas extends JPanel {
 		//Move the drawing area
 		// 0,0 is the top left corner. so the y value actually goes towards the bottom.
 		g2d.translate(80, 100); //x,y
+		
+		//Rotate the drawing area
+		g2d.rotate(90);
+		
 		//Draw a filled, round-rectangle:
 		g2d.fillRoundRect(-20, -20, 70, 60, 25, 25);
+		
+		//Change the color
+		g2d.setColor(Color.red);
+		g2d.fillRoundRect(20, 20, 70, 60, 25, 25);
+		
+		g2d.setColor(Color.blue);
+		g2d.fillOval(30, 30, 10, 10);
+		
 	}
 	
 	@Override
